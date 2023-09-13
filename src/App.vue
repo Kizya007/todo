@@ -3,22 +3,24 @@
     <div class="header">
       <img class="header-img" src="./assets/img/todoImg.png" alt="" />
       <div class="header-date">
-        <p class="header-date__week">Thur 9</p>
-        <p class="header-date__time">6:23</p>
+        <p class="header-date__week">{{ nowDay }} {{ nowDate }}</p>
+        <p class="header-date__time">{{ nowTime }}</p>
       </div>
     </div>
     <div class="todo-content">
-      <input class="todo-content__input" type="text" placeholder="Note" />
+      <input
+        class="todo-content__input"
+        v-model="form.text"
+        type="text"
+        placeholder="Note"
+      />
       <div class="todo-content__icon">
-        <plusIcon />
+        <plusIcon @click="addTodo" />
         <arrowBottom />
       </div>
     </div>
     <ul class="todo-list">
-      <TodoMain />
-      <TodoMain />
-      <TodoMain />
-      <TodoMain />
+      <TodoMain v-for="todo in todos" :item="todo" :key="todo.title" />
     </ul>
   </div>
 </template>
@@ -27,6 +29,7 @@
 import TodoMain from "./components/TodoMain.vue";
 import plusIcon from "./assets/icon/plusIcon.vue";
 import arrowBottom from "./assets/icon/arrowBottom.vue";
+import { reactive, ref } from "vue";
 
 export default {
   name: "App",
@@ -35,6 +38,48 @@ export default {
     plusIcon,
     arrowBottom,
   },
+  setup() {
+    const todos = ref([
+      {
+        title: "Dinner",
+        date: "1",
+      },
+    ]);
+    const date = new Date();
+    const form = reactive({
+      text: "",
+    });
+
+    const weekDays = [
+      "Понедельник",
+      "Вторник",
+      "Среда",
+      "Четверг",
+      "Пятница",
+      "суббота",
+      "Воскресенье",
+    ];
+    const nowDay = weekDays[date.getDay() - 1];
+    const nowDate = date.getDate();
+    const nowTime = date.getHours() + ":" + date.getMinutes();
+
+    function addTodo() {
+      todos.value.push({
+        title: form.text,
+        date: nowTime,
+      });
+    }
+
+    return {
+      nowDay,
+      nowDate,
+      nowTime,
+      form,
+      todos,
+      addTodo,
+    };
+  },
+  methods: {},
 };
 </script>
 

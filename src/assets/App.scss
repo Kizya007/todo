@@ -8,8 +8,8 @@
 
   margin: 0 auto;
 
-  width: 430px;
-  height: 598px;
+  max-width: 430px;
+  max-height: 598px;
 
   border-radius: 10px;
   .header {
@@ -22,7 +22,7 @@
     &-date {
       position: absolute;
 
-      top: 140px;
+      top: 130px;
       right: 40%;
 
       display: flex;

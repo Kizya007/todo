@@ -1,8 +1,8 @@
 <template>
   <li class="todo">
     <div class="todo-text">
-      <p class="todo-text__title">Dinner</p>
-      <p class="todo-text__time">Today at 8:00 PM</p>
+      <p class="todo-text__title">{{ item.title }}</p>
+      <p class="todo-text__time">{{ item.date }}</p>
     </div>
     <div class="todo-icons">
       <circleIcon />
@@ -17,6 +17,9 @@ import garbageIcon from "../assets/icon/garbageIcon.vue";
 
 export default {
   name: "TodoMain",
+  props: {
+    item: Object,
+  },
   components: {
     circleIcon,
     garbageIcon,
