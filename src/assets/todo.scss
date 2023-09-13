@@ -1,0 +1,41 @@
+.todo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 24px;
+
+  width: 394px;
+
+  list-style: none;
+  &-text {
+    padding: 0;
+    &__title {
+      font-family: "Inter";
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+
+      margin: 0;
+    }
+    &__time {
+      color: #888;
+      font-family: "Inter";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+
+      margin: 0;
+    }
+  }
+  &-icons {
+    svg {
+        margin-right: 14px;
+        &:last-child {
+            margin: 0;
+        }
+    }
+  }
+}
