@@ -9,7 +9,7 @@
     </div>
     <div class="todo-content">
       <input
-        class="todo-content__input"
+        :class="['todo-content__input', { error: form.text === '' }]"
         v-model="form.text"
         type="text"
         placeholder="Note"
@@ -20,7 +20,12 @@
       </div>
     </div>
     <ul class="todo-list">
-      <TodoMain v-for="todo in todos" :item="todo" :key="todo.title" />
+      <TodoMain
+        v-for="todo in todos"
+        :item="todo"
+        :key="todo.title"
+        @deleteTodo="todoDelete"
+      />
     </ul>
   </div>
 </template>
@@ -63,11 +68,31 @@ export default {
     const nowDate = date.getDate();
     const nowTime = date.getHours() + ":" + date.getMinutes();
 
+    // объявляю функцию
     function addTodo() {
-      todos.value.push({
-        title: form.text,
-        date: nowTime,
-      });
+      // объявляю переменную которая равняется найденному значению которое возвращает функция find которую я вызвал у массива todos
+      // по переданному условию, если вводимое значение в инпуте совпадает с уже существующим значением в одном из оюьектов массива
+      const findTodo = todos.value.find((todo) => todo.title === form.text);
+      // Проверяю наличие найденного значения в перемнной findTodo
+
+      if (form.text === "") {
+        alert("Введите значение");
+        return;
+      }
+      if (findTodo) {
+        alert("Уже такая задача есть");
+      } else {
+        // Обращаюсь к массиву todos и к его значению и после вызываю функцию push, с помощью которой добавляю обьект
+        todos.value.push({
+          title: form.text,
+          date: nowTime,
+        });
+      }
+    }
+
+    function todoDelete(value) {
+      todos.value = todos.value.filter((todo) => todo.title !== value);
+      console.log(todos);
     }
 
     return {
@@ -77,6 +102,7 @@ export default {
       form,
       todos,
       addTodo,
+      todoDelete,
     };
   },
   methods: {},

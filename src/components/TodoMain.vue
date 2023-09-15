@@ -6,7 +6,7 @@
     </div>
     <div class="todo-icons">
       <circleIcon />
-      <garbageIcon />
+      <garbageIcon @click="deleteTodo" />
     </div>
   </li>
 </template>
@@ -20,9 +20,20 @@ export default {
   props: {
     item: Object,
   },
+  emits: [
+    'deleteTodo',
+  ],
   components: {
     circleIcon,
     garbageIcon,
+  },
+  setup(props,context) {
+    function deleteTodo() {
+      context.emit('deleteTodo', props.item.title)
+    }
+    return {
+      deleteTodo,
+    }
   },
 };
 </script>
