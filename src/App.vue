@@ -21,10 +21,11 @@
     </div>
     <ul class="todo-list">
       <TodoMain
-        v-for="todo in todos"
+        v-for="todo in state.todos"
         :item="todo"
         :key="todo.title"
         @deleteTodo="todoDelete"
+        @save="changeTodo"
       />
     </ul>
   </div>
@@ -34,7 +35,7 @@
 import TodoMain from "./components/TodoMain.vue";
 import plusIcon from "./assets/icon/plusIcon.vue";
 import arrowBottom from "./assets/icon/arrowBottom.vue";
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 
 export default {
   name: "App",
@@ -44,9 +45,11 @@ export default {
     arrowBottom,
   },
   setup() {
-    const todos = localStorage.getItem("todos")
-      ? ref(JSON.parse(localStorage.getItem("todos")))
-      : ref([]);
+    const state = reactive({
+      todos: localStorage.getItem("todos")
+        ? JSON.parse(localStorage.getItem("todos"))
+        : [],
+    });
     const date = new Date();
     const form = reactive({
       text: "",
@@ -69,7 +72,7 @@ export default {
     function addTodo() {
       // объявляю переменную которая равняется найденному значению которое возвращает функция find которую я вызвал у массива todos
       // по переданному условию, если вводимое значение в инпуте совпадает с уже существующим значением в одном из оюьектов массива
-      const findTodo = todos.value.find((todo) => todo.title === form.text);
+      const findTodo = state.todos.find((todo) => todo.title === form.text);
       // Проверяю наличие найденного значения в перемнной findTodo
 
       if (form.text === "") {
@@ -80,17 +83,28 @@ export default {
         alert("Уже такая задача есть");
       } else {
         // Обращаюсь к массиву todos и к его значению и после вызываю функцию push, с помощью которой добавляю обьект
-        todos.value.push({
+        state.todos.push({
           title: form.text,
           date: nowTime,
         });
-        localStorage.setItem("todos", JSON.stringify(todos.value));
+        localStorage.setItem("todos", JSON.stringify(state.todos));
       }
     }
 
     function todoDelete(value) {
-      todos.value = todos.value.filter((todo) => todo.title !== value);
-      console.log(todos);
+      state.todos = state.todos.filter((todo) => todo.title !== value);
+    }
+    function changeTodo({ title, newTitle }) {
+      console.log(title,newTitle);
+      state.todos = state.todos.map((todo) => {
+        if (todo.title === title) {
+          return {
+            title: newTitle,
+            date: nowTime,
+          };
+        }
+        return { ...todo };
+      });
     }
 
     return {
@@ -98,9 +112,10 @@ export default {
       nowDate,
       nowTime,
       form,
-      todos,
+      state,
       addTodo,
       todoDelete,
+      changeTodo,
     };
   },
   methods: {},
