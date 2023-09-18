@@ -44,12 +44,9 @@ export default {
     arrowBottom,
   },
   setup() {
-    const todos = ref([
-      {
-        title: "Dinner",
-        date: "1",
-      },
-    ]);
+    const todos = localStorage.getItem("todos")
+      ? ref(JSON.parse(localStorage.getItem("todos")))
+      : ref([]);
     const date = new Date();
     const form = reactive({
       text: "",
@@ -87,6 +84,7 @@ export default {
           title: form.text,
           date: nowTime,
         });
+        localStorage.setItem("todos", JSON.stringify(todos.value));
       }
     }
 
