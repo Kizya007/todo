@@ -16,11 +16,10 @@
       />
       <div class="todo-content__icon">
         <plusIcon @click="addTodo" />
-        <arrowBottom />
       </div>
     </div>
     <ul class="todo-list">
-      <TodoMain
+      <TodoItem
         v-for="todo in state.todos"
         :item="todo"
         :key="todo.title"
@@ -32,17 +31,16 @@
 </template>
 
 <script>
-import TodoMain from "./components/TodoMain.vue";
+import TodoItem from "./components/TodoItem.vue";
 import plusIcon from "./assets/icon/plusIcon.vue";
-import arrowBottom from "./assets/icon/arrowBottom.vue";
+
 import { reactive } from "vue";
 
 export default {
   name: "App",
   components: {
-    TodoMain,
+    TodoItem,
     plusIcon,
-    arrowBottom,
   },
   setup() {
     const state = reactive({
@@ -93,9 +91,10 @@ export default {
 
     function todoDelete(value) {
       state.todos = state.todos.filter((todo) => todo.title !== value);
+      localStorage.setItem("todos", JSON.stringify(state.todos))
     }
     function changeTodo({ title, newTitle }) {
-      console.log(title,newTitle);
+      console.log(title, newTitle);
       state.todos = state.todos.map((todo) => {
         if (todo.title === title) {
           return {
@@ -105,6 +104,7 @@ export default {
         }
         return { ...todo };
       });
+      localStorage.setItem("todos", JSON.stringify(state.todos));
     }
 
     return {
